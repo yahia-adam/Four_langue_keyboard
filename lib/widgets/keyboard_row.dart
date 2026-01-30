@@ -9,11 +9,9 @@ class KeyboardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        KeyboardButton(label: "A", onTap: () {}),
-        KeyboardButton(label: "B", onTap: () {}),
-        KeyboardButton(label: "C", onTap: () {}),
-      ],
+      children: keys
+          .map((key) => KeyboardButton(centerLabel: key, onTap: () {}))
+          .toList(),
     );
   }
 }

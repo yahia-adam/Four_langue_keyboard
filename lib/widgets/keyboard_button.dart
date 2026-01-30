@@ -1,45 +1,80 @@
 import 'package:flutter/material.dart';
 
 class KeyboardButton extends StatelessWidget {
-  final String label;
+  final String centerLabel;
+  final String? leftLabel;
+  final String? rightLabel;
   final VoidCallback onTap;
 
-  const KeyboardButton({super.key, required this.label, required this.onTap});
+  const KeyboardButton({
+    super.key,
+    required this.centerLabel,
+    this.leftLabel,
+    this.rightLabel,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // Dimensions typiques d'une touche
-        width: 45,
-        height: 50,
+        width: 60, // Légèrement élargi pour le confort visuel
+        height: 55,
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(6), // Coins légèrement arrondis
+          borderRadius: BorderRadius.circular(6),
           boxShadow: [
-            // Ombre du bas pour l'effet 3D de la touche
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.5),
-              spreadRadius: 0,
-              blurRadius: 1,
+              color: Colors.black.withValues(alpha: 0.1),
               offset: const Offset(0, 2),
+              blurRadius: 1,
             ),
           ],
-          border: Border.all(color: Colors.grey.shade300, width: 0.5),
+          border: Border.all(color: Colors.grey.shade300),
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: const TextStyle(
-              color: Colors.black87,
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'sans-serif', // Proche du style Apple
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+          child: Stack(
+            children: [
+              // 1. Les caractères du haut (Gauche et Droite)
+              if (leftLabel != null || rightLabel != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceBetween, // C'est ici que l'espace se crée
+                  children: [
+                    _buildLabel(leftLabel ?? "", isSide: true),
+                    _buildLabel(rightLabel ?? "", isSide: true),
+                  ],
+                ),
+
+              // 2. Le caractère principal bien au centre
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  centerLabel,
+                  style: const TextStyle(
+                    fontSize: 20, // Un peu plus grand pour bien le distinguer
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLabel(String text, {required bool isSide}) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 11, // Taille réduite pour le style "Mac" en haut
+        fontWeight: FontWeight.w300,
+        color: Colors.grey.shade700,
       ),
     );
   }
