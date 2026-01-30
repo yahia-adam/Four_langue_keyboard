@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pooring_keyboard/widgets/keyboard_row.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -17,7 +18,16 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(child: Text("Hello World")),
+      body: Center(
+        child: Column(
+          children: [
+            KeyboardRow(keys: ["A", "B", "C"]),
+            KeyboardRow(keys: ["E", "D", "F"]),
+            KeyboardRow(keys: ["G", "H", "I"]),
+            KeyboardRow(keys: ["J", "K", "L"]),
+          ],
+        ),
+      ),
     );
   }
 }
