@@ -1,77 +1,116 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
-class KeyboardButton extends StatelessWidget {
-  final String? centerLabel;
-  final String? leftLabel;
-  final String? rightLabel;
-  final IconData? icon; // Pour les icônes (Delete, Shift, etc.)
-  final double width; // Largeur ajustable
-  final Color? color; // Couleur de fond (blanc ou gris)
-  final VoidCallback onTap;
+class KeyboardButton extends StatefulWidget {
+  final String centerLabel;
+  final String? leftLabel; // Ajouté pour tes caractères secondaires
+  final String? rightLabel; // Ajouté pour tes caractères secondaires
+  final IconData? icon;
+  final double width;
+  final Color color;
+  final bool isActive;
+  final Function(String) onTap;
 
   const KeyboardButton({
     super.key,
-    this.centerLabel,
+    required this.centerLabel,
     this.leftLabel,
     this.rightLabel,
     this.icon,
-    this.width = 55, // Par défaut 55, mais on pourra mettre 80 ou 100
-    this.color = Colors.white,
+    this.width = 55,
+    required this.color,
+    this.isActive = false,
     required this.onTap,
   });
 
   @override
+  State<KeyboardButton> createState() => _KeyboardButtonState();
+}
+
+class _KeyboardButtonState extends State<KeyboardButton> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
+    // LOGIQUE DE COULEUR :
+    // 1. Si la touche est "Active" (Shift/Caps activé) -> Elle prend la couleur grise des touches de contrôle
+    // 2. Si on appuie (Pressed) -> Elle change radicalement pour montrer le clic
+    // 3. Sinon -> Couleur standard (Blanc ou Gris selon le modèle)
+    Color backgroundColor;
+    if (widget.isActive) {
+      backgroundColor = Colors.blue.shade100; // Couleur distinctive quand actif
+    } else if (_isPressed) {
+      backgroundColor = Colors.grey.shade400; // Couleur plus sombre au clic
+    } else {
+      backgroundColor = widget.color;
+    }
+
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width, // Utilisation de la largeur personnalisée
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: () => widget.onTap(widget.centerLabel),
+      child: AnimatedContainer(
+        duration: const Duration(
+          milliseconds: 80,
+        ), // Animation rapide pour le clic
+        width: widget.width,
         height: 55,
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          color: color,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              offset: const Offset(0, 2),
-              blurRadius: 1,
-            ),
-          ],
-          border: Border.all(color: Colors.grey.shade300),
+          boxShadow: _isPressed
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    offset: const Offset(0, 2),
+                    blurRadius: 1,
+                  ),
+                ],
+          border: Border.all(
+            color: widget.isActive
+                ? Colors.blue.shade300
+                : Colors.grey.shade300,
+            width: widget.isActive ? 2 : 1,
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
           child: Stack(
             children: [
-              // Caractères en haut
-              if (leftLabel != null || rightLabel != null)
+              // 1. Caractères secondaires (Gauche/Droite)
+              if (widget.leftLabel != null || widget.rightLabel != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildLabel(leftLabel ?? "", fontSize: 11),
-                    _buildLabel(rightLabel ?? "", fontSize: 11),
+                    _buildLabel(widget.leftLabel ?? "", fontSize: 11),
+                    _buildLabel(widget.rightLabel ?? "", fontSize: 11),
                   ],
                 ),
 
-              // Contenu principal (Texte OU Icône)
-              // Dans le build du KeyboardButton, remplace l'Align central par ceci :
+              // 2. Contenu principal (Texte OU Icône)
               Align(
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (icon != null)
-                      Icon(icon, size: 16, color: Colors.black54),
-                    if (centerLabel != null && centerLabel!.isNotEmpty)
+                    if (widget.icon != null)
+                      Icon(
+                        widget.icon,
+                        size: 18,
+                        color: widget.isActive
+                            ? Colors.blue.shade900
+                            : Colors.black54,
+                      ),
+                    if (widget.centerLabel.isNotEmpty)
                       Text(
-                        centerLabel!,
+                        widget.centerLabel,
                         style: TextStyle(
-                          fontSize: icon != null
-                              ? 10
-                              : 18, // Plus petit si une icône est présente
-                          fontWeight: FontWeight.w400,
+                          fontSize: widget.icon != null ? 10 : 18,
+                          fontWeight: widget.isActive
+                              ? FontWeight.bold
+                              : FontWeight.w400,
                           color: Colors.black87,
                         ),
                       ),

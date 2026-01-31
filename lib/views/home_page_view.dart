@@ -14,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Le contrôleur qui fait le lien entre clavier et texte
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode(); // Ajoute ceci
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,14 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextWorkArea(controller: _controller), // La zone de texte
-              const KeyboardView(), // Ton clavier complet
+              TextWorkArea(
+                controller: _controller,
+                focusNode: _focusNode,
+              ), // La zone de texte
+              KeyboardView(
+                controller: _controller,
+                focusNode: _focusNode,
+              ), // Ton clavier complet
             ],
           ),
         ),

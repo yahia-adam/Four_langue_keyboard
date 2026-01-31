@@ -3,8 +3,13 @@ import 'package:flutter/services.dart';
 
 class TextWorkArea extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode focusNode;
 
-  const TextWorkArea({super.key, required this.controller});
+  const TextWorkArea({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +60,16 @@ class TextWorkArea extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             color: Colors.white,
             child: TextField(
+              focusNode: focusNode,
+              onTapOutside: (event) {
+                // Ne rien faire ou forcer le focus si on clique sur le clavier
+              },
+              autofocus: true,
               controller: controller,
               maxLines: null, // Permet plusieurs lignes
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: "Écrire en Sárí ici...",
+                hintText: "Écrire en fur ici...",
               ),
               style: const TextStyle(fontSize: 18, fontFamily: 'serif'),
             ),

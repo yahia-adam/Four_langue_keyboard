@@ -2,16 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:pooring_keyboard/models/key_model.dart';
 import 'package:pooring_keyboard/widgets/keyboard_row.dart';
 
-class KeyboardView extends StatelessWidget {
-  const KeyboardView({super.key});
+class KeyboardView extends StatefulWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+
+  const KeyboardView({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+  });
+
+  @override
+  State<KeyboardView> createState() => _KeyboardViewState();
+}
+
+class _KeyboardViewState extends State<KeyboardView> {
+  bool isCapsLock = false;
+  bool isShiftActive = false;
+
+  // La condition pour savoir si on affiche en MAJUSCULE
+  bool get shouldShowUppercase => isCapsLock || isShiftActive;
+
+  void toggleShift() {
+    setState(() {
+      isShiftActive = !isShiftActive;
+    });
+  }
+
+  void toggleCapsLock() {
+    setState(() {
+      isCapsLock = !isCapsLock;
+      if (isCapsLock) isShiftActive = false; // Désactive shift si caps est mis
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // RANGÉE 1 : Chiffres
+        // RANGÉE 1
         KeyboardRow(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          onKeyTap: (val) {
+            // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
+            if (isShiftActive && !isCapsLock) {
+              setState(() => isShiftActive = false); // On repasse en minuscule
+            }
+          },
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(centerLabel: '1'),
             KeyModel(centerLabel: '2'),
@@ -32,8 +74,19 @@ class KeyboardView extends StatelessWidget {
           ],
         ),
 
-        // RANGÉE 2 : AZERTY / QWERTY modifié
+        // RANGÉE 2
         KeyboardRow(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          onKeyTap: (val) {
+            // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
+            if (isShiftActive && !isCapsLock) {
+              setState(() => isShiftActive = false); // On repasse en minuscule
+            }
+          },
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(
               centerLabel: 'tab',
@@ -54,8 +107,19 @@ class KeyboardView extends StatelessWidget {
           ],
         ),
 
-        // RANGÉE 3 : Milieu
+        // RANGÉE 3
         KeyboardRow(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          onKeyTap: (val) {
+            // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
+            if (isShiftActive && !isCapsLock) {
+              setState(() => isShiftActive = false); // On repasse en minuscule
+            }
+          },
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(
               centerLabel: 'caps',
@@ -63,14 +127,17 @@ class KeyboardView extends StatelessWidget {
               width: 90,
               color: Colors.grey[200],
             ),
-            KeyModel(centerLabel: 'a'), KeyModel(centerLabel: 's'),
+            KeyModel(centerLabel: 'a'),
+            KeyModel(centerLabel: 's'),
             KeyModel(centerLabel: 'd'),
-            KeyModel(centerLabel: '†'), // Tiré du clavier noir
-            KeyModel(centerLabel: 'g'), KeyModel(centerLabel: 'h'),
-            KeyModel(centerLabel: 'j'), KeyModel(centerLabel: 'k'),
+            KeyModel(centerLabel: 'ɨ'),
+            KeyModel(centerLabel: 'g'),
+            KeyModel(centerLabel: 'h'),
+            KeyModel(centerLabel: 'j'),
+            KeyModel(centerLabel: 'k'),
             KeyModel(centerLabel: 'l'),
             KeyModel(
-              centerLabel: " ",
+              centerLabel: "enter",
               icon: Icons.keyboard_return,
               width: 95,
               color: Colors.blue[50],
@@ -78,8 +145,19 @@ class KeyboardView extends StatelessWidget {
           ],
         ),
 
-        // RANGÉE 4 : Bas (avec les lettres spéciales Four)
+        // RANGÉE 4
         KeyboardRow(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          onKeyTap: (val) {
+            // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
+            if (isShiftActive && !isCapsLock) {
+              setState(() => isShiftActive = false); // On repasse en minuscule
+            }
+          },
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(
               centerLabel: 'shift',
@@ -103,12 +181,23 @@ class KeyboardView extends StatelessWidget {
           ],
         ),
 
-        // RANGÉE 5 : Barre d'espace et fonctions
+        // RANGÉE 5
         KeyboardRow(
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          onKeyTap: (val) {
+            // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
+            if (isShiftActive && !isCapsLock) {
+              setState(() => isShiftActive = false); // On repasse en minuscule
+            }
+          },
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(centerLabel: 'ctrl', width: 60, color: Colors.grey[200]),
             KeyModel(centerLabel: 'alt', width: 60, color: Colors.grey[200]),
-            KeyModel(centerLabel: '', width: 300), // ESPACE
+            KeyModel(centerLabel: ' ', width: 300), // ESPACE
             KeyModel(centerLabel: 'alt', width: 60, color: Colors.grey[200]),
             KeyModel(centerLabel: 'ctrl', width: 60, color: Colors.grey[200]),
           ],
