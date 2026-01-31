@@ -45,15 +45,17 @@ class _KeyboardViewState extends State<KeyboardView> {
         KeyboardRow(
           controller: widget.controller,
           focusNode: widget.focusNode,
-          isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          isUppercase: shouldShowUppercase,
+          isShiftActive: isShiftActive,
+          isCapsLock: isCapsLock,
+          onShiftPressed: toggleShift,
+          onCapsLockPressed: toggleCapsLock,
           onKeyTap: (val) {
             // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
             if (isShiftActive && !isCapsLock) {
               setState(() => isShiftActive = false); // On repasse en minuscule
             }
           },
-          onShiftPressed: toggleShift,
-          onCapsLockPressed: toggleCapsLock,
           keys: [
             KeyModel(centerLabel: '1'),
             KeyModel(centerLabel: '2'),
@@ -79,6 +81,8 @@ class _KeyboardViewState extends State<KeyboardView> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          isShiftActive: isShiftActive,
+          isCapsLock: isCapsLock,
           onKeyTap: (val) {
             // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
             if (isShiftActive && !isCapsLock) {
@@ -112,6 +116,8 @@ class _KeyboardViewState extends State<KeyboardView> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          isShiftActive: isShiftActive,
+          isCapsLock: isCapsLock,
           onKeyTap: (val) {
             // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
             if (isShiftActive && !isCapsLock) {
@@ -150,6 +156,8 @@ class _KeyboardViewState extends State<KeyboardView> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          isShiftActive: isShiftActive,
+          isCapsLock: isCapsLock,
           onKeyTap: (val) {
             // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
             if (isShiftActive && !isCapsLock) {
@@ -186,6 +194,8 @@ class _KeyboardViewState extends State<KeyboardView> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           isUppercase: shouldShowUppercase, // Utilise la logique combinée
+          isShiftActive: isShiftActive,
+          isCapsLock: isCapsLock,
           onKeyTap: (val) {
             // Si on tape une lettre et que le Shift était actif (mais pas Caps Lock)
             if (isShiftActive && !isCapsLock) {

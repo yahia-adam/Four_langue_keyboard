@@ -37,7 +37,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
     // 3. Sinon -> Couleur standard (Blanc ou Gris selon le modèle)
     Color backgroundColor;
     if (widget.isActive) {
-      backgroundColor = Colors.blue.shade100; // Couleur distinctive quand actif
+      backgroundColor = Colors.blue.shade50; // Couleur distinctive quand actif
     } else if (_isPressed) {
       backgroundColor = Colors.grey.shade400; // Couleur plus sombre au clic
     } else {

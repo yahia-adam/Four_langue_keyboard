@@ -7,6 +7,8 @@ class KeyboardRow extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final bool isUppercase;
+  final bool isShiftActive;
+  final bool isCapsLock;
 
   // Nouveaux paramètres pour gérer les différents types de Majuscules
   final VoidCallback onShiftPressed;
@@ -19,9 +21,11 @@ class KeyboardRow extends StatelessWidget {
     required this.focusNode,
     required this.controller,
     required this.isUppercase,
+    required this.isShiftActive,
+    required this.isCapsLock,
     required this.onShiftPressed,
-    required this.onCapsLockPressed, // Ajouté
-    required this.onKeyTap, // Ajouté
+    required this.onCapsLockPressed,
+    required this.onKeyTap,
   });
 
   @override
@@ -29,14 +33,23 @@ class KeyboardRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: keys.map((keyData) {
-        String displayLabel = keyData.centerLabel;
+        final String lowerKey = keyData.centerLabel.toLowerCase();
 
-        if (isUppercase && !_isSystemKey(keyData.centerLabel)) {
+        // --- LOGIQUE POUR ALLUMER LA TOUCHE ---
+        bool active = false;
+        if (lowerKey == 'shift' || keyData.icon == Icons.arrow_upward) {
+          active = isShiftActive;
+        } else if (lowerKey == 'caps' ||
+            keyData.icon == Icons.keyboard_capslock) {
+          active = isCapsLock;
+        }
+
+        // --- LOGIQUE D'AFFICHAGE DU TEXTE ---
+        String displayLabel = keyData.centerLabel;
+        if (isUppercase && !_isSystemKey(lowerKey)) {
           displayLabel = keyData.centerLabel.toUpperCase();
-        } else {
-          if (!_isSystemKey(keyData.centerLabel)) {
-            displayLabel = keyData.centerLabel.toLowerCase();
-          }
+        } else if (!_isSystemKey(lowerKey)) {
+          displayLabel = keyData.centerLabel.toLowerCase();
         }
 
         return KeyboardButton(
@@ -46,6 +59,7 @@ class KeyboardRow extends StatelessWidget {
           icon: keyData.icon,
           width: keyData.width,
           color: keyData.color ?? Colors.white,
+          isActive: active,
           onTap: (val) {
             final String lowerKey = keyData.centerLabel.toLowerCase();
 
