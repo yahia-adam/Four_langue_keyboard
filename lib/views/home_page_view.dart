@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pooring_keyboard/widgets/keyboard_row.dart';
-import 'package:pooring_keyboard/widgets/keyboard_button.dart';
+import 'keyboard_view.dart';
+import 'package:pooring_keyboard/widgets/text_work_area.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -12,25 +12,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Le contrôleur qui fait le lien entre clavier et texte
+  final TextEditingController _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Row(
-          children: [
-            KeyboardButton(
-              centerLabel: 'A',
-              onTap: () {},
-              leftLabel: 'a',
-              rightLabel: 'Q',
-            ),
-            KeyboardButton(centerLabel: 'B', onTap: () {}, leftLabel: '@'),
-            KeyboardButton(centerLabel: 'C', onTap: () {}, rightLabel: 'Z'),
-          ],
+        child: Container(
+          width: 800, // Largeur fixe pour le look "clavier en ligne"
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextWorkArea(controller: _controller), // La zone de texte
+              const KeyboardView(), // Ton clavier complet
+            ],
+          ),
         ),
       ),
     );
