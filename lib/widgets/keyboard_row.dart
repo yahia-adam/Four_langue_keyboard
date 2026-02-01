@@ -6,13 +6,15 @@ class KeyboardRow extends StatelessWidget {
   final List<KeyModel> keys;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final bool isUppercase;
   final bool isShiftActive;
   final bool isCapsLock;
+  final bool isCtrlActive;
+  final bool isAltActive;
 
-  // Nouveaux paramètres pour gérer les différents types de Majuscules
   final VoidCallback onShiftPressed;
   final VoidCallback onCapsLockPressed;
+  final VoidCallback onCtrlPressed;
+  final VoidCallback onAltPressed;
   final Function(String) onKeyTap;
 
   const KeyboardRow({
@@ -20,11 +22,14 @@ class KeyboardRow extends StatelessWidget {
     required this.keys,
     required this.focusNode,
     required this.controller,
-    required this.isUppercase,
     required this.isShiftActive,
     required this.isCapsLock,
     required this.onShiftPressed,
     required this.onCapsLockPressed,
+    required this.onCtrlPressed,
+    required this.onAltPressed,
+    required this.isCtrlActive,
+    required this.isAltActive,
     required this.onKeyTap,
   });
 
@@ -35,66 +40,71 @@ class KeyboardRow extends StatelessWidget {
       children: keys.map((keyData) {
         final String lowerKey = keyData.centerLabel.toLowerCase();
 
-        // --- LOGIQUE POUR ALLUMER LA TOUCHE ---
         bool active = false;
         if (lowerKey == 'shift' || keyData.icon == Icons.arrow_upward) {
           active = isShiftActive;
         } else if (lowerKey == 'caps' ||
             keyData.icon == Icons.keyboard_capslock) {
           active = isCapsLock;
+        } else if (lowerKey == 'ctrl' ||
+            keyData.icon == Icons.keyboard_control) {
+          active = isCtrlActive;
+        } else if (lowerKey == 'alt' || keyData.icon == Icons.keyboard_alt) {
+          active = isAltActive;
         }
 
-        // --- LOGIQUE D'AFFICHAGE DU TEXTE ---
-        String displayLabel = keyData.centerLabel;
-        if (isUppercase && !_isSystemKey(lowerKey)) {
-          displayLabel = keyData.centerLabel.toUpperCase();
-        } else if (!_isSystemKey(lowerKey)) {
-          displayLabel = keyData.centerLabel.toLowerCase();
+        String centerLabel = keyData.centerLabel;
+        String leftLabel = keyData.leftLabel ?? "";
+        String rightLabel = keyData.rightLabel ?? "";
+
+        if (isCapsLock) {
+          centerLabel = rightLabel;
+          rightLabel = keyData.centerLabel;
         }
 
-        return KeyboardButton(
-          centerLabel: displayLabel,
-          leftLabel: keyData.leftLabel,
-          rightLabel: keyData.rightLabel,
-          icon: keyData.icon,
-          width: keyData.width,
-          color: keyData.color ?? Colors.white,
-          isActive: active,
-          onTap: (val) {
-            final String lowerKey = keyData.centerLabel.toLowerCase();
+        if (isShiftActive) {
+          String tmp = centerLabel;
+          centerLabel = rightLabel;
+          rightLabel = tmp;
+        }
 
-            // 1. Détection Caps Lock
-            if (lowerKey == 'caps' || keyData.icon == Icons.keyboard_capslock) {
-              onCapsLockPressed();
-            }
-            // 2. Détection Shift
-            else if (lowerKey == 'shift' ||
-                keyData.icon == Icons.arrow_upward) {
-              onShiftPressed();
-            }
-            // 3. Détection Delete
-            else if (lowerKey == 'delete' ||
-                keyData.icon == Icons.backspace_outlined) {
-              _handleBackspace(controller);
-            }
-            // 4. Détection tabulation
-            else if (lowerKey == 'tab' || keyData.icon == Icons.tab) {
-              _insertText('\t', controller);
-            }
-            // 5. Détection Enter
-            else if (lowerKey == 'enter' ||
-                keyData.icon == Icons.arrow_forward) {
-              _insertText('\n', controller);
-            }
-            // 6. Touches normales
-            else {
-              _insertText(val, controller);
-              onKeyTap(val); // Indique au parent qu'une lettre a été tapée
-            }
+        if (isAltActive) {
+          centerLabel = leftLabel;
+          leftLabel = "";
+          rightLabel = "";
+        }
 
-            // Garder le focus sur le champ de texte
-            Future.microtask(() => focusNode.requestFocus());
-          },
+        if (_isSystemKey(lowerKey)) {
+          centerLabel = keyData.centerLabel;
+          leftLabel = "";
+          rightLabel = "";
+        }
+
+        bool isUpperCase =
+            centerLabel == centerLabel.toUpperCase() &&
+            centerLabel != centerLabel.toLowerCase();
+
+        return Expanded(
+          flex: (keyData.width / 10).round(),
+          child: KeyboardButton(
+            centerLabel: centerLabel,
+            leftLabel: leftLabel,
+            rightLabel: rightLabel,
+            variations: keyData.variations,
+            icon: keyData.icon,
+            width: keyData.width,
+            color: keyData.color ?? Colors.white,
+            isActive: active,
+            onLongPress: (vars) => {
+              _showAccentPopup(
+                context,
+                vars.map((char) {
+                  return isUpperCase ? char.toUpperCase() : char.toLowerCase();
+                }).toList(),
+              ),
+            },
+            onTap: (val) => _onKeyHandle(keyData, val),
+          ),
         );
       }).toList(),
     );
@@ -130,6 +140,123 @@ class KeyboardRow extends StatelessWidget {
         selection: TextSelection.collapsed(offset: selection.start - 1),
       );
     }
+  }
+
+  void _onKeyHandle(KeyModel keyData, String currentVal) {
+    final String lowerKey = keyData.centerLabel.toLowerCase();
+
+    if (lowerKey == 'caps' || keyData.icon == Icons.keyboard_capslock) {
+      onCapsLockPressed();
+    } else if (lowerKey == 'shift' || keyData.icon == Icons.arrow_upward) {
+      onShiftPressed();
+    } else if (lowerKey == 'ctrl' || keyData.icon == Icons.keyboard_control) {
+      onCtrlPressed();
+    } else if (lowerKey == 'alt' || keyData.icon == Icons.keyboard_alt) {
+      onAltPressed();
+    } else if (lowerKey == 'delete' ||
+        keyData.icon == Icons.backspace_outlined) {
+      _handleBackspace(controller);
+    } else if (lowerKey == 'tab' || keyData.icon == Icons.tab) {
+      _insertText('\t', controller);
+    } else if (lowerKey == 'enter' || keyData.icon == Icons.keyboard_return) {
+      _insertText('\n', controller);
+    } else {
+      _insertText(currentVal, controller);
+      onKeyTap(currentVal);
+    }
+
+    Future.microtask(() => focusNode.requestFocus());
+  }
+
+  void _showAccentPopup(BuildContext context, List<String> variations) {
+    final overlay = Overlay.of(context);
+    late OverlayEntry entry;
+
+    entry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          // Zone pour fermer en cliquant ailleurs
+          GestureDetector(
+            onTap: () => entry.remove(),
+            child: Container(color: Colors.transparent),
+          ),
+
+          // La petite boîte flottante
+          Center(
+            // On centre pour l'instant, ou on positionne
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFECEFF1), // Gris clair pro
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize
+                      .min, // INDISPENSABLE : la boîte s'adapte au contenu
+                  children: variations
+                      .map(
+                        (char) => _buildMiniKey(char, () {
+                          _insertText(char, controller);
+                          entry.remove();
+                        }),
+                      )
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    overlay.insert(entry);
+  }
+
+  Widget _buildMiniKey(String char, VoidCallback onTap) {
+    bool _isMiniPressed =
+        false; // Il faudra transformer ce widget en StatefulWidget ou utiliser un StatefulBuilder
+
+    return StatefulBuilder(
+      builder: (context, setMiniState) {
+        return GestureDetector(
+          onTapDown: (_) => setMiniState(() => _isMiniPressed = true),
+          onTapUp: (_) => setMiniState(() => _isMiniPressed = false),
+          onTapCancel: () => setMiniState(() => _isMiniPressed = false),
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 60),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: _isMiniPressed ? Colors.grey.shade400 : Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: _isMiniPressed
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 2,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+            ),
+            child: Center(
+              child: Text(char, style: const TextStyle(fontSize: 18)),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   // Petite fonction utilitaire à mettre en bas de ta classe KeyboardRow

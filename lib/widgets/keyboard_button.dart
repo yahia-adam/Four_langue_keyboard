@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 
 class KeyboardButton extends StatefulWidget {
   final String centerLabel;
-  final String? leftLabel; // Ajouté pour tes caractères secondaires
-  final String? rightLabel; // Ajouté pour tes caractères secondaires
+  final String? leftLabel;
+  final String? rightLabel;
+  final List<String>? variations;
   final IconData? icon;
   final double width;
   final Color color;
   final bool isActive;
   final Function(String) onTap;
+  final Function(List<String>) onLongPress;
 
   const KeyboardButton({
     super.key,
     required this.centerLabel,
     this.leftLabel,
     this.rightLabel,
+    this.variations,
     this.icon,
     this.width = 55,
     required this.color,
     this.isActive = false,
     required this.onTap,
+    required this.onLongPress,
   });
 
   @override
@@ -48,7 +52,16 @@ class _KeyboardButtonState extends State<KeyboardButton> {
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) => setState(() => _isPressed = false),
       onTapCancel: () => setState(() => _isPressed = false),
-      onTap: () => widget.onTap(widget.centerLabel),
+      onTap: () {
+        widget.onTap(widget.centerLabel);
+      },
+      onLongPress: () {
+        if (widget.variations != null && widget.variations!.isNotEmpty) {
+          widget.onLongPress(widget.variations!);
+        } else {
+          widget.onTap(widget.centerLabel);
+        }
+      },
       child: AnimatedContainer(
         duration: const Duration(
           milliseconds: 80,
@@ -59,12 +72,15 @@ class _KeyboardButtonState extends State<KeyboardButton> {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(6),
-          boxShadow: _isPressed
-              ? []
+          boxShadow: _isPressed || widget.isActive
+              ? [] // Touche enfoncée : pas d'ombre
               : [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    offset: const Offset(0, 2),
+                    color: Colors.black.withValues(alpha: 0.15),
+                    offset: const Offset(
+                      0,
+                      3,
+                    ), // Un peu plus bas pour le look PC
                     blurRadius: 1,
                   ),
                 ],

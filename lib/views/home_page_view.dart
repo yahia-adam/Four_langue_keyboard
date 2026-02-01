@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
               KeyboardView(
                 controller: _controller,
                 focusNode: _focusNode,
+                keyboardConfig: "assets/four_keyboard_config.json",
               ), // Ton clavier complet
             ],
           ),

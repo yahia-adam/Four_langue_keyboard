@@ -1,0 +1,333 @@
+{
+    "rows": [
+        [
+            {
+                "center": "1",
+                "shift": "!",
+                "alt": "¹"
+            },
+            {
+                "center": "2",
+                "shift": "@",
+                "alt": "²"
+            },
+            {
+                "center": "3",
+                "shift": "#",
+                "alt": "³"
+            },
+            {
+                "center": "4",
+                "shift": "$",
+                "alt": "¤"
+            },
+            {
+                "center": "5",
+                "shift": "%",
+                "alt": "€"
+            },
+            {
+                "center": "6",
+                "shift": "^",
+                "alt": "¼"
+            },
+            {
+                "center": "7",
+                "shift": "&",
+                "alt": "½"
+            },
+            {
+                "center": "8",
+                "shift": "*",
+                "alt": "¾"
+            },
+            {
+                "center": "9",
+                "shift": "(",
+                "alt": "‘"
+            },
+            {
+                "center": "0",
+                "shift": ")",
+                "alt": "’"
+            },
+            {
+                "center": "delete",
+                "icon": "backspace",
+                "width": 85.0,
+                "color": "grey"
+            }
+        ],
+        [
+            {
+                "center": "tab",
+                "icon": "tab",
+                "width": 75.0,
+                "color": "grey"
+            },
+            {
+                "center": "a̱",
+                "shift": "A̱",
+                "variations": [
+                    "a̱",
+                    "á̱",
+                    "â̱",
+                    "ǎ̱",
+                    "a̱a̱",
+                    "á̱á̱",
+                    "á̱a̱",
+                    "a̱á̱"
+                ]
+            },
+            {
+                "center": "w",
+                "shift": "W"
+            },
+            {
+                "center": "e",
+                "shift": "E",
+                "variations": [
+                    "e",
+                    "é",
+                    "ê",
+                    "ě",
+                    "ee",
+                    "éé",
+                    "ée",
+                    "eé"
+                ]
+            },
+            {
+                "center": "r",
+                "shift": "R"
+            },
+            {
+                "center": "t",
+                "shift": "T"
+            },
+            {
+                "center": "y",
+                "shift": "Y"
+            },
+            {
+                "center": "u",
+                "shift": "U"
+            },
+            {
+                "center": "i",
+                "shift": "I",
+                "variations": [
+                    "i",
+                    "í",
+                    "î",
+                    "ǐ",
+                    "ii",
+                    "íí",
+                    "íi",
+                    "ií"
+                ]
+            },
+            {
+                "center": "o",
+                "shift": "O",
+                "variations": [
+                    "o",
+                    "ó",
+                    "ô",
+                    "ǒ",
+                    "oo",
+                    "óó",
+                    "óo",
+                    "oó"
+                ]
+            },
+            {
+                "center": "p",
+                "shift": "P"
+            },
+            {
+                "center": "[",
+                "shift": "{",
+                "alt": "«"
+            },
+            {
+                "center": "]",
+                "shift": "}",
+                "alt": "»"
+            }
+        ],
+        [
+            {
+                "center": "caps",
+                "icon": "caps",
+                "width": 90.0,
+                "color": "grey"
+            },
+            {
+                "center": "a",
+                "shift": "A",
+                "variations": [
+                    "a",
+                    "á",
+                    "â",
+                    "ǎ",
+                    "aa",
+                    "áá",
+                    "áa",
+                    "aá"
+                ]
+            },
+            {
+                "center": "s",
+                "shift": "S"
+            },
+            {
+                "center": "d",
+                "shift": "D"
+            },
+            {
+                "center": "ɨ",
+                "shift": "Ɨ",
+                "variations": [
+                    "ɨ",
+                    "ɨ́",
+                    "ɨ̂",
+                    "ɨ̌",
+                    "ɨɨ",
+                    "ɨ́ɨ́",
+                    "ɨ́ɨ",
+                    "ɨɨ́"
+                ]
+            },
+            {
+                "center": "g",
+                "shift": "G"
+            },
+            {
+                "center": "h",
+                "shift": "H"
+            },
+            {
+                "center": "j",
+                "shift": "J"
+            },
+            {
+                "center": "k",
+                "shift": "K"
+            },
+            {
+                "center": "l",
+                "shift": "L"
+            },
+            {
+                "center": ";",
+                "shift": ":",
+                "alt": ""
+            },
+            {
+                "center": "enter",
+                "icon": "enter",
+                "width": 95.0,
+                "color": "blue"
+            }
+        ],
+        [
+            {
+                "center": "shift",
+                "icon": "shift",
+                "width": 115.0,
+                "color": "grey"
+            },
+            {
+                "center": "z",
+                "shift": "Z",
+                "variations": [
+                    "q",
+                    "f",
+                    "x",
+                    "c",
+                    "v"
+                ]
+            },
+            {
+                "center": "ŋ",
+                "shift": "Ŋ"
+            },
+            {
+                "center": "ny",
+                "shift": "NY"
+            },
+            {
+                "center": "ʉ",
+                "shift": "Ʉ",
+                "variations": [
+                    "ʉ",
+                    "ʉ́",
+                    "ʉ̂",
+                    "ʉ̌",
+                    "ʉʉ",
+                    "ʉ́ʉ́",
+                    "ʉ́ʉ",
+                    "ʉʉ́"
+                ]
+            },
+            {
+                "center": "b",
+                "shift": "B"
+            },
+            {
+                "center": "n",
+                "shift": "N"
+            },
+            {
+                "center": "m",
+                "shift": "M"
+            },
+            {
+                "center": ",",
+                "shift": "<"
+            },
+            {
+                "center": ".",
+                "shift": ">"
+            },
+            {
+                "center": "/",
+                "shift": "?"
+            },
+            {
+                "center": "shift",
+                "icon": "shift",
+                "width": 115.0,
+                "color": "grey"
+            }
+        ],
+        [
+            {
+                "center": "ctrl",
+                "width": 80.0,
+                "color": "grey"
+            },
+            {
+                "center": "alt",
+                "width": 80.0,
+                "color": "grey"
+            },
+            {
+                "center": " ",
+                "width": 400.0,
+                "color": "white"
+            },
+            {
+                "center": "alt",
+                "width": 80.0,
+                "color": "grey"
+            },
+            {
+                "center": "ctrl",
+                "width": 80.0,
+                "color": "grey"
+            }
+        ]
+    ]
+}
